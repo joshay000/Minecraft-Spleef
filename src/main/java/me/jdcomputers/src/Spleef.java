@@ -3,12 +3,18 @@ package me.jdcomputers.src;
 import me.jdcomputers.commands.CommandCollection;
 import me.jdcomputers.files.FileManager;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class Spleef extends JavaPlugin {
@@ -23,12 +29,15 @@ public final class Spleef extends JavaPlugin {
     // 8) Touch bedrock [step on], water [inside], or lava [inside]: SPECTATOR mode (game over)
     // 9) Battle royale aspect: Rising water/lava levels
 
-    private final FileManager config = new FileManager(this, "", "config.yml");
+    private final FileManager config = new FileManager(this, "", "config.yml").load();
+    private final FileManager arenas = new FileManager(this, "", "arenas.yml").load();
 
     @Override
     public void onEnable() {
         this.getLogger().info("Enabled");
         this.getServer().getPluginManager().registerEvents(new MyListener(), this);
+
+        setDefaults();
     }
 
     @Override
@@ -99,5 +108,47 @@ public final class Spleef extends JavaPlugin {
         }
 
         return null;
+    }
+
+    private void setDefaults() {
+        boolean changeOccurred = false;
+
+        if (!config.has("digger")) {
+            ItemStack item = new ItemStack(Material.NETHERITE_PICKAXE, 1);
+
+            item.addUnsafeEnchantment(Enchantment.EFFICIENCY, 10);
+            item.addUnsafeEnchantment(Enchantment.UNBREAKING, 10);
+
+            if (item.hasItemMeta()) {
+                ItemMeta meta = item.getItemMeta();
+
+                List<String> lore = new ArrayList<>();
+
+                lore.add(ChatColor.LIGHT_PURPLE + "The epic pickaxe weilded by the fierce player.");
+                lore.add(ChatColor.LIGHT_PURPLE + "The player will CREAM all other players");
+                lore.add(ChatColor.LIGHT_PURPLE + "with this pickaxe by digging the ground");
+                lore.add(ChatColor.LIGHT_PURPLE + "out below them!");
+
+                assert meta != null;
+                meta.setDisplayName(ChatColor.AQUA + "Spleef Pickaxe");
+                meta.setLore(lore);
+                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+                item.setItemMeta(meta);
+            }
+
+            config.set("digger", item);
+
+            changeOccurred = true;
+        }
+
+        if (!config.has("drop_concrete_likelihood")) {
+            config.set("drop_concrete_likelihood", 50);
+
+            changeOccurred = true;
+        }
+
+        if (changeOccurred)
+            config.save();
     }
 }
