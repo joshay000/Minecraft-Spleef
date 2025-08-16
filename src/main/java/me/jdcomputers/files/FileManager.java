@@ -34,6 +34,10 @@ public final class FileManager {
         config.set(key.toString(), value);
     }
 
+    public boolean has(Object key) {
+        return get(key) != null;
+    }
+
     public Object get(Object key) {
         return config.get(key.toString());
     }
