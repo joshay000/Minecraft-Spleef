@@ -2,3 +2,6 @@ name: Spleef
 version: '0.0.1'
 main: me.jdcomputers.src.Spleef
 api-version: '1.21'
+commands:
+  test:
+    description: Just a test
