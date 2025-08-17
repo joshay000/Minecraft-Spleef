@@ -1,5 +1,10 @@
 C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\Command.java
 C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\CommandCollection.java
+C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\spleef\SpleefArenaCommand.java
+C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\spleef\SpleefCommand.java
+C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\spleef\SpleefConfigCommand.java
+C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\spleef\SpleefHelpCommand.java
+C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\spleef\SpleefLobbyCommand.java
 C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\files\FileManager.java
 C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\src\MyListener.java
 C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\src\Spleef.java

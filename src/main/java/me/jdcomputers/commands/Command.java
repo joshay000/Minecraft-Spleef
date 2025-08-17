@@ -1,5 +1,6 @@
 package me.jdcomputers.commands;
 
+import me.jdcomputers.commands.spleef.SpleefHelpCommand;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -8,11 +9,17 @@ import java.util.List;
 public abstract class Command {
     private final String name;
     private final String description;
-    private final List<Command> subCommands;
+    protected final Command parent;
+    protected final List<Command> subCommands;
 
     public Command(String name, String description) {
+        this(name, description, null);
+    }
+
+    public Command(String name, String description, Command parent) {
         this.name = name;
         this.description = description;
+        this.parent = parent;
         this.subCommands = new ArrayList<>();
     }
 
@@ -37,6 +44,14 @@ public abstract class Command {
                 return sub;
 
         return null;
+    }
+
+    public boolean hasParent() {
+        return parent != null;
+    }
+
+    public Command getParent() {
+        return parent;
     }
 
     public List<Command> getSubCommands() {
