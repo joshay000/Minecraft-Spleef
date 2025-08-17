@@ -30,7 +30,7 @@ public class ArenaListCommand extends Command {
             }
         }
 
-        FileManager arena = Spleef.getInstance().getArenas();
+        FileManager arena = Spleef.getInstance().getArenas().load();
 
         Set<String> keys = arena.getSection("arenas").getKeys(false);
         String[] ordered = keys.stream().sorted().toArray(String[]::new);

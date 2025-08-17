@@ -1,10 +1,7 @@
 package me.jdcomputers.commands.spleef;
 
 import me.jdcomputers.commands.Command;
-import me.jdcomputers.commands.spleef.arena.ArenaCreateCommand;
-import me.jdcomputers.commands.spleef.arena.ArenaDeleteCommand;
-import me.jdcomputers.commands.spleef.arena.ArenaEditCommand;
-import me.jdcomputers.commands.spleef.arena.ArenaListCommand;
+import me.jdcomputers.commands.spleef.arena.*;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -19,11 +16,12 @@ public class SpleefArenaCommand extends Command {
         addSubCommand(new ArenaListCommand(this));
         addSubCommand(new ArenaEditCommand(this));
         addSubCommand(new ArenaDeleteCommand(this));
+        addSubCommand(new ArenaSpawnCommand(this));
     }
 
     @Override
     public void run(Player player, String[] args) {
-        player.sendMessage(ChatColor.RED + "Correct usage: /spleef arena <list|create|edit|delete>");
+        player.sendMessage(ChatColor.RED + "Correct usage: /spleef arena <list|create|edit|delete|spawn>");
     }
 
     @Override
@@ -34,6 +32,7 @@ public class SpleefArenaCommand extends Command {
         output.add("create");
         output.add("edit");
         output.add("delete");
+        output.add("spawn");
 
         return output;
     }

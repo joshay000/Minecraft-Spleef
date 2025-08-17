@@ -27,7 +27,7 @@ public class ArenaEditCommand extends Command {
             return;
         }
 
-        FileManager arena = Spleef.getInstance().getArenas();
+        FileManager arena = Spleef.getInstance().getArenas().load();
 
         Set<String> keys = arena.getSection("arenas").getKeys(false);
 
@@ -41,21 +41,24 @@ public class ArenaEditCommand extends Command {
 
         arena = Spleef.getInstance().getArenas().load();
 
-        ArenaWorld world = Spleef.getInstance().getArenaWorld();
+        if (!arena.has("arenas." + name + ".spawn")) {
+            Location from = arena.getLocation("arenas." + name + ".from");
+            Location to = arena.getLocation("arenas." + name + ".to");
 
-        Location from = arena.getLocation("arenas." + name + ".from");
-        Location to = arena.getLocation("arenas." + name + ".to");
-        Location teleport = new Location(world.getWorld(), (from.getBlockX() + to.getBlockX()) / 2, 2, (from.getBlockZ() + to.getBlockZ()) / 2);
+            arena.set("arenas." + name + ".spawn", new Location(from.getWorld(), (from.getBlockX() + to.getBlockX()) / 2, 1, (from.getBlockZ() + to.getBlockZ()) / 2));
+        }
+
+        Location spawn = arena.getLocation("arenas." + name + ".spawn");
 
         player.sendMessage(ChatColor.GOLD + "Teleporting...");
-        player.teleport(teleport);
+        player.teleport(spawn);
         player.setGameMode(GameMode.CREATIVE);
         player.getInventory().clear();
     }
 
     @Override
     public List<String> tabComplete(Player player, String[] args) {
-        FileManager arena = Spleef.getInstance().getArenas();
+        FileManager arena = Spleef.getInstance().getArenas().load();
 
         Set<String> keys = arena.getSection("arenas").getKeys(false);
 

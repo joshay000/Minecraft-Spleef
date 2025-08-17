@@ -23,7 +23,7 @@ public class SpleefConfigCommand extends Command {
             return;
         }
 
-        FileManager config = Spleef.getInstance().getSpleefConfig();
+        FileManager config = Spleef.getInstance().getSpleefConfig().load();
 
         if (args[1].equalsIgnoreCase("digger")) {
             ItemStack item = player.getInventory().getItemInMainHand();

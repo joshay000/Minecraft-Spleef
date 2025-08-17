@@ -17,7 +17,7 @@ public class LobbySetCommand extends Command {
 
     @Override
     public void run(Player player, String[] args) {
-        FileManager config = Spleef.getInstance().getSpleefConfig();
+        FileManager config = Spleef.getInstance().getSpleefConfig().load();
 
         Location loc = player.getLocation();
 

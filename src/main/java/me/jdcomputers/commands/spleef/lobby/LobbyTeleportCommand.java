@@ -16,7 +16,7 @@ public class LobbyTeleportCommand extends Command {
 
     @Override
     public void run(Player player, String[] args) {
-        FileManager config = Spleef.getInstance().getSpleefConfig();
+        FileManager config = Spleef.getInstance().getSpleefConfig().load();
 
         if (!config.has("lobby")) {
             player.sendMessage(ChatColor.RED + "The lobby location has not been set yet. Use " + ChatColor.WHITE + "/spleef lobby set" + ChatColor.RED + " to set the lobby location.");

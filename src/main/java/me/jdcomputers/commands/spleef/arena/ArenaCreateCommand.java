@@ -50,7 +50,7 @@ public class ArenaCreateCommand extends Command {
             return;
         }
 
-        FileManager arena = Spleef.getInstance().getArenas();
+        FileManager arena = Spleef.getInstance().getArenas().load();
 
         if (arena.has("arenas." + args[4])) {
             player.sendMessage(ChatColor.RED + "That arena name is already in use.");
@@ -81,15 +81,18 @@ public class ArenaCreateCommand extends Command {
         WorldEditCreations.setBlocks(Material.BEDROCK, new Location(world.getWorld(), minX, minY, minZ), new Location(world.getWorld(), maxX, minY, maxZ));
         WorldEditCreations.setBlocks(Material.GLASS, new Location(world.getWorld(), minX, maxY, minZ), new Location(world.getWorld(), maxX, maxY, maxZ));
 
+        Location spawn = new Location(world.getWorld(), (minX + maxX) / 2, 2, (minZ + maxZ) / 2);
+
         arena.set("arenas." + name + ".type", type);
         arena.set("arenas." + name + ".size", diameter);
         arena.set("arenas." + name + ".from", new Location(world.getWorld(), minX, minY, minZ));
         arena.set("arenas." + name + ".to", new Location(world.getWorld(), maxX, maxY, maxZ));
+        arena.set("arenas." + name + ".spawn", spawn);
 
         arena.save();
 
         player.sendMessage(ChatColor.GOLD + "Your arena was successfully created. Teleporting...");
-        player.teleport(new Location(world.getWorld(), (minX + maxX) / 2, 2, (minZ + maxZ) / 2));
+        player.teleport(spawn);
         player.setGameMode(GameMode.CREATIVE);
         player.getInventory().clear();
     }

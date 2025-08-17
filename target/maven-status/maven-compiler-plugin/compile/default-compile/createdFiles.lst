@@ -10,6 +10,7 @@ me\jdcomputers\commands\spleef\lobby\LobbyTeleportCommand.class
 me\jdcomputers\worldedit\WorldEditCreations.class
 me\jdcomputers\commands\spleef\arena\ArenaCreateCommand.class
 me\jdcomputers\src\Spleef.class
+me\jdcomputers\commands\spleef\arena\ArenaSpawnCommand.class
 me\jdcomputers\files\FileManager.class
 me\jdcomputers\src\MyListener.class
 me\jdcomputers\commands\spleef\arena\ArenaListCommand.class
