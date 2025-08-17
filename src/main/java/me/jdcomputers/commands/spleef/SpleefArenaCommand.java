@@ -2,6 +2,7 @@ package me.jdcomputers.commands.spleef;
 
 import me.jdcomputers.commands.Command;
 import me.jdcomputers.commands.spleef.arena.ArenaCreateCommand;
+import me.jdcomputers.commands.spleef.arena.ArenaListCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -13,6 +14,7 @@ public class SpleefArenaCommand extends Command {
         super("Arena", "Create, list, update, or remove arenas.", parent);
 
         addSubCommand(new ArenaCreateCommand(this));
+        addSubCommand(new ArenaListCommand(this));
     }
 
     @Override
