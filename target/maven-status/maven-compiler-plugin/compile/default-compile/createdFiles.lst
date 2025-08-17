@@ -3,8 +3,10 @@ me\jdcomputers\worlds\ArenaWorld.class
 me\jdcomputers\commands\spleef\SpleefArenaCommand.class
 me\jdcomputers\commands\spleef\SpleefLobbyCommand.class
 me\jdcomputers\commands\spleef\SpleefConfigCommand.class
+me\jdcomputers\commands\spleef\lobby\LobbySetCommand.class
 me\jdcomputers\commands\spleef\SpleefCommand.class
 me\jdcomputers\commands\Command.class
+me\jdcomputers\commands\spleef\lobby\LobbyTeleportCommand.class
 me\jdcomputers\worldedit\WorldEditCreations.class
 me\jdcomputers\commands\spleef\arena\ArenaCreateCommand.class
 me\jdcomputers\src\Spleef.class

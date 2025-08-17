@@ -20,15 +20,14 @@ import java.util.List;
 
 public final class Spleef extends JavaPlugin {
     // TODO:
-    // 1) Add arenas /spleef arena <list/edit/add/delete>
-    // 2) Add permissions for /spleef arena (op only OR require detailed permissions [LOW PRIORITY]
-    // 3) Exclude those in CREATIVE; everyone else forced participation
-    // 4) Add /spleef lobby (edit the lobby)
-    // 5) Add the spleef game
-    // 6) Give Efficiency X pickaxe; arenas MUST be concrete
-    // 7) Add flexibility between being able to retrieve and place concrete or not [Perhaps a %]
-    // 8) Touch bedrock [step on], water [inside], or lava [inside]: SPECTATOR mode (game over)
-    // 9) Battle royale aspect: Rising water/lava levels
+    // 1) Add permissions for /spleef arena (op only OR require detailed permissions [LOW PRIORITY]
+    // 2) Exclude those in CREATIVE; everyone else forced participation
+    // 3) Add /spleef lobby (edit the lobby)
+    // 4) Add the spleef game
+    // 5) Give Efficiency X pickaxe; arenas MUST be concrete
+    // 6) Add flexibility between being able to retrieve and place concrete or not [Perhaps a %]
+    // 7) Touch bedrock [step on], water [inside], or lava [inside]: SPECTATOR mode (game over)
+    // 8) Battle royale aspect: Rising water/lava levels
 
     private static Spleef SINGLETON;
 
