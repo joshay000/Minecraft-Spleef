@@ -2,6 +2,7 @@ package me.jdcomputers.src;
 
 import me.jdcomputers.commands.CommandCollection;
 import me.jdcomputers.files.FileManager;
+import me.jdcomputers.spleef.SpleefGame;
 import me.jdcomputers.worlds.ArenaWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -33,6 +34,7 @@ public final class Spleef extends JavaPlugin {
     private final ArenaWorld arenaWorld = new ArenaWorld();
     private final FileManager config = new FileManager(this, "", "config.yml").load();
     private final FileManager arenas = new FileManager(this, "", "arenas.yml").load();
+    private final SpleefGame game = new SpleefGame(this);
 
     public static Spleef getInstance() {
         return SINGLETON;
@@ -48,7 +50,7 @@ public final class Spleef extends JavaPlugin {
 
         this.getLogger().info("Arena world successfully created.");
         this.getLogger().info("Enabled");
-        this.getServer().getPluginManager().registerEvents(new MyListener(), this);
+        this.getServer().getPluginManager().registerEvents(new MyListener(this), this);
 
         setDefaults();
     }
@@ -175,5 +177,9 @@ public final class Spleef extends JavaPlugin {
 
     public ArenaWorld getArenaWorld() {
         return arenaWorld;
+    }
+
+    public SpleefGame getGame() {
+        return game;
     }
 }
