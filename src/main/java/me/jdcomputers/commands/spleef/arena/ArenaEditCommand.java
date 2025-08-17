@@ -43,9 +43,6 @@ public class ArenaEditCommand extends Command {
 
         ArenaWorld world = Spleef.getInstance().getArenaWorld();
 
-        Bukkit.broadcastMessage(name);
-        Bukkit.broadcastMessage("arenas." + name + ".from");
-
         Location from = arena.getLocation("arenas." + name + ".from");
         Location to = arena.getLocation("arenas." + name + ".to");
         Location teleport = new Location(world.getWorld(), (from.getBlockX() + to.getBlockX()) / 2, 2, (from.getBlockZ() + to.getBlockZ()) / 2);

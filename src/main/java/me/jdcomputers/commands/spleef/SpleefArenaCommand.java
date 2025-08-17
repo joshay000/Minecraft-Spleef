@@ -2,6 +2,7 @@ package me.jdcomputers.commands.spleef;
 
 import me.jdcomputers.commands.Command;
 import me.jdcomputers.commands.spleef.arena.ArenaCreateCommand;
+import me.jdcomputers.commands.spleef.arena.ArenaDeleteCommand;
 import me.jdcomputers.commands.spleef.arena.ArenaEditCommand;
 import me.jdcomputers.commands.spleef.arena.ArenaListCommand;
 import org.bukkit.ChatColor;
@@ -17,6 +18,7 @@ public class SpleefArenaCommand extends Command {
         addSubCommand(new ArenaCreateCommand(this));
         addSubCommand(new ArenaListCommand(this));
         addSubCommand(new ArenaEditCommand(this));
+        addSubCommand(new ArenaDeleteCommand(this));
     }
 
     @Override
