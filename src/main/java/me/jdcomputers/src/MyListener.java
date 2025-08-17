@@ -28,13 +28,8 @@ public class MyListener implements Listener {
         FileManager arena = spleef.getArenas();
         SpleefGame game = spleef.getGame();
 
-        player.setHealth(20);
-        player.setFoodLevel(20);
-        player.setSaturation(20.0f);
-        player.getInventory().clear();
-
         if (!game.hasPlayer(player))
-            game.addPlayer(player);
+            game.addPlayer(player).setup();
 
         if (!game.isInGame()) {
             if (config.has("lobby"))

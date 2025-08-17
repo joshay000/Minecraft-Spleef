@@ -3,8 +3,11 @@ package me.jdcomputers.src;
 import me.jdcomputers.commands.CommandCollection;
 import me.jdcomputers.files.FileManager;
 import me.jdcomputers.spleef.SpleefGame;
+import me.jdcomputers.spleef.SpleefPlayer;
 import me.jdcomputers.worlds.ArenaWorld;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -22,12 +25,11 @@ import java.util.List;
 public final class Spleef extends JavaPlugin {
     // TODO:
     // 1) Add permissions for /spleef arena (op only OR require detailed permissions [LOW PRIORITY]
-    // 2) Exclude those in CREATIVE; everyone else forced participation
-    // 3) Add the spleef game
-    // 4) Give Efficiency X pickaxe; arenas MUST be concrete
-    // 5) Add flexibility between being able to retrieve and place concrete or not [Perhaps a %]
-    // 6) Touch bedrock [step on], water [inside], or lava [inside]: SPECTATOR mode (game over)
-    // 7) Battle royale aspect: Rising water/lava levels
+    // 2) Add the spleef game
+    // 3) Give Efficiency X pickaxe; arenas MUST be concrete
+    // 4) Add flexibility between being able to retrieve and place concrete or not [Perhaps a %]
+    // 5) Touch bedrock [step on], water [inside], or lava [inside]: SPECTATOR mode (game over)
+    // 6) Battle royale aspect: Rising water/lava levels
 
     private static Spleef SINGLETON;
 
@@ -53,11 +55,27 @@ public final class Spleef extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new MyListener(this), this);
 
         setDefaults();
+
+        game.reset();
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            SpleefPlayer spleefPlayer = game.addPlayer(p);
+
+            if (config.has("lobby"))
+                p.teleport(config.getLocation("lobby"));
+
+            spleefPlayer.setup();
+        }
+
+        game.start();
     }
 
     @Override
     public void onDisable() {
         this.getLogger().info("Disabled");
+
+        game.clearPlayers();
+        game.reset();
     }
 
     @Override
