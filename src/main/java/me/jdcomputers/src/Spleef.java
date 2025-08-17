@@ -2,6 +2,7 @@ package me.jdcomputers.src;
 
 import me.jdcomputers.commands.CommandCollection;
 import me.jdcomputers.files.FileManager;
+import me.jdcomputers.worlds.ArenaWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -31,6 +32,7 @@ public final class Spleef extends JavaPlugin {
 
     private static Spleef SINGLETON;
 
+    private final ArenaWorld arenaWorld = new ArenaWorld();
     private final FileManager config = new FileManager(this, "", "config.yml").load();
     private final FileManager arenas = new FileManager(this, "", "arenas.yml").load();
 
@@ -42,6 +44,11 @@ public final class Spleef extends JavaPlugin {
     public void onEnable() {
         SINGLETON = this;
 
+        this.getLogger().info("Creating arena world for spleef...");
+
+        arenaWorld.build();
+
+        this.getLogger().info("Arena world successfully created.");
         this.getLogger().info("Enabled");
         this.getServer().getPluginManager().registerEvents(new MyListener(), this);
 
@@ -166,5 +173,9 @@ public final class Spleef extends JavaPlugin {
 
     public FileManager getArenas() {
         return arenas;
+    }
+
+    public ArenaWorld getArenaWorld() {
+        return arenaWorld;
     }
 }

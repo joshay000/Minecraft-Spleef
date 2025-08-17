@@ -1,5 +1,9 @@
 C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\Command.java
 C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\CommandCollection.java
+C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\spleef\arena\ArenaCreateCommand.java
+C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\spleef\arena\ArenaDeleteCommand.java
+C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\spleef\arena\ArenaEditCommand.java
+C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\spleef\arena\ArenaListCommand.java
 C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\spleef\SpleefArenaCommand.java
 C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\spleef\SpleefCommand.java
 C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands\spleef\SpleefConfigCommand.java
@@ -8,3 +12,6 @@ C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\commands
 C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\files\FileManager.java
 C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\src\MyListener.java
 C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\src\Spleef.java
+C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\worldedit\WorldEditCreations.java
+C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\worlds\ArenaWorld.java
+C:\Users\Joshua Diemer\IdeaProjects\Spleef\src\main\java\me\jdcomputers\worlds\CustomWorld.java
