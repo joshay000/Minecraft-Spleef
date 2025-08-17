@@ -29,11 +29,19 @@ public final class Spleef extends JavaPlugin {
     // 8) Touch bedrock [step on], water [inside], or lava [inside]: SPECTATOR mode (game over)
     // 9) Battle royale aspect: Rising water/lava levels
 
+    private static Spleef SINGLETON;
+
     private final FileManager config = new FileManager(this, "", "config.yml").load();
     private final FileManager arenas = new FileManager(this, "", "arenas.yml").load();
 
+    public static Spleef getInstance() {
+        return SINGLETON;
+    }
+
     @Override
     public void onEnable() {
+        SINGLETON = this;
+
         this.getLogger().info("Enabled");
         this.getServer().getPluginManager().registerEvents(new MyListener(), this);
 
@@ -150,5 +158,13 @@ public final class Spleef extends JavaPlugin {
 
         if (changeOccurred)
             config.save();
+    }
+
+    public FileManager getSpleefConfig() {
+        return config;
+    }
+
+    public FileManager getArenas() {
+        return arenas;
     }
 }
