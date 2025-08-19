@@ -77,9 +77,9 @@ public class ArenaCreateCommand extends Command {
 
         player.sendMessage(ChatColor.GOLD + "Creating your " + ChatColor.WHITE + diameter + "x" + diameter + ChatColor.GOLD + " arena named " + ChatColor.GREEN + name + ChatColor.GOLD + "...");
 
-        WorldEditCreations.createWall(Material.GLASS, new Location(world.getWorld(), minX, minY, minZ), new Location(world.getWorld(), maxX, maxY, maxZ));
+        WorldEditCreations.createWall(Material.BARRIER, new Location(world.getWorld(), minX, minY, minZ), new Location(world.getWorld(), maxX, maxY, maxZ));
         WorldEditCreations.setBlocks(Material.BEDROCK, new Location(world.getWorld(), minX, minY, minZ), new Location(world.getWorld(), maxX, minY, maxZ));
-        WorldEditCreations.setBlocks(Material.GLASS, new Location(world.getWorld(), minX, maxY, minZ), new Location(world.getWorld(), maxX, maxY, maxZ));
+        WorldEditCreations.setBlocks(Material.BARRIER, new Location(world.getWorld(), minX, maxY, minZ), new Location(world.getWorld(), maxX, maxY, maxZ));
 
         Location spawn = new Location(world.getWorld(), (minX + maxX) / 2, 2, (minZ + maxZ) / 2);
 

@@ -25,11 +25,8 @@ import java.util.List;
 public final class Spleef extends JavaPlugin {
     // TODO:
     // 1) Add permissions for /spleef arena (op only OR require detailed permissions [LOW PRIORITY]
-    // 2) Add the spleef game
-    // 3) Give Efficiency X pickaxe; arenas MUST be concrete
-    // 4) Add flexibility between being able to retrieve and place concrete or not [Perhaps a %]
-    // 5) Touch bedrock [step on], water [inside], or lava [inside]: SPECTATOR mode (game over)
-    // 6) Battle royale aspect: Rising water/lava levels
+    // 2) Battle royale aspect: Rising water/lava levels
+    // 3) Fix the game starting even when there is no arena
 
     private static Spleef SINGLETON;
 
@@ -149,8 +146,8 @@ public final class Spleef extends JavaPlugin {
         if (!config.has("digger")) {
             ItemStack item = new ItemStack(Material.NETHERITE_PICKAXE, 1);
 
-            item.addUnsafeEnchantment(Enchantment.EFFICIENCY, 10);
-            item.addUnsafeEnchantment(Enchantment.UNBREAKING, 10);
+            item.addUnsafeEnchantment(Enchantment.EFFICIENCY, 20);
+            item.addUnsafeEnchantment(Enchantment.UNBREAKING, 20);
 
             if (item.hasItemMeta()) {
                 ItemMeta meta = item.getItemMeta();

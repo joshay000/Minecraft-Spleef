@@ -17,6 +17,7 @@ import org.bukkit.event.player.*;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class MyListener implements Listener {
     private final Spleef spleef;
@@ -119,6 +120,43 @@ public class MyListener implements Listener {
     }
 
     @EventHandler
+    public void onBarrierBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+
+        if (event.getBlock().getType() != Material.BARRIER && event.getBlock().getType() != Material.BEDROCK)
+            return;
+
+        FileManager arenas = spleef.getArenas().load();
+
+        Set<String> names = arenas.getSection("arenas").getKeys(false);
+
+        Location breakLocation = event.getBlock().getLocation();
+
+        for (String name : names) {
+            Location from = arenas.getLocation("arenas." + name + ".from");
+            Location to = arenas.getLocation("arenas." + name + ".to");
+
+            int minX = Math.min(from.getBlockX(), to.getBlockX());
+            int minY = Math.min(from.getBlockY(), to.getBlockY());
+            int minZ = Math.min(from.getBlockZ(), to.getBlockZ());
+            int maxX = Math.max(from.getBlockX(), to.getBlockX());
+            int maxY = Math.max(from.getBlockY(), to.getBlockY());
+            int maxZ = Math.max(from.getBlockZ(), to.getBlockZ());
+            int x = breakLocation.getBlockX();
+            int y = breakLocation.getBlockY();
+            int z = breakLocation.getBlockZ();
+
+            if (x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ) {
+                event.setCancelled(true);
+
+                player.sendMessage(ChatColor.RED + "You cannot break bedrock or barrier blocks of an arena!");
+
+                return;
+            }
+        }
+    }
+
+    @EventHandler
     public void onPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
 
@@ -134,6 +172,43 @@ public class MyListener implements Listener {
     }
 
     @EventHandler
+    public void onBarrierPlace(BlockPlaceEvent event) {
+        Player player = event.getPlayer();
+
+        if (event.getBlock().getType() != Material.BARRIER && event.getBlock().getType() != Material.BEDROCK)
+            return;
+
+        FileManager arenas = spleef.getArenas().load();
+
+        Set<String> names = arenas.getSection("arenas").getKeys(false);
+
+        Location breakLocation = event.getBlock().getLocation();
+
+        for (String name : names) {
+            Location from = arenas.getLocation("arenas." + name + ".from");
+            Location to = arenas.getLocation("arenas." + name + ".to");
+
+            int minX = Math.min(from.getBlockX(), to.getBlockX());
+            int minY = Math.min(from.getBlockY(), to.getBlockY());
+            int minZ = Math.min(from.getBlockZ(), to.getBlockZ());
+            int maxX = Math.max(from.getBlockX(), to.getBlockX());
+            int maxY = Math.max(from.getBlockY(), to.getBlockY());
+            int maxZ = Math.max(from.getBlockZ(), to.getBlockZ());
+            int x = breakLocation.getBlockX();
+            int y = breakLocation.getBlockY();
+            int z = breakLocation.getBlockZ();
+
+            if (x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ) {
+                event.setCancelled(true);
+
+                player.sendMessage(ChatColor.RED + "You cannot place bedrock or barrier blocks in an arena!");
+
+                return;
+            }
+        }
+    }
+
+    @EventHandler
     public void onMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
@@ -144,8 +219,13 @@ public class MyListener implements Listener {
 
         Block in = loc.getBlock();
         Block under = loc.subtract(0, 1, 0).getBlock();
+        Block above = loc.add(0, 1, 0).getBlock();
 
-        if (in.getType() != Material.WATER && in.getType() != Material.LAVA && under.getType() != Material.BEDROCK)
+        if (in.getType() != Material.WATER &&
+                in.getType() != Material.LAVA &&
+                above.getType() != Material.WATER &&
+                above.getType() != Material.LAVA &&
+                under.getType() != Material.BEDROCK)
             return;
 
         SpleefGame game = spleef.getGame();
@@ -171,7 +251,5 @@ public class MyListener implements Listener {
         }
 
         game.end(null);
-
-        // TODO: State the final winning player!
     }
 }
