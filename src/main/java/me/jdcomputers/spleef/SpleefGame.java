@@ -3,7 +3,6 @@ package me.jdcomputers.spleef;
 import me.jdcomputers.files.FileManager;
 import me.jdcomputers.src.Spleef;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -13,9 +12,12 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 public class SpleefGame {
+    private static final int GAME_SETUP_TIMER_MAX = 5;
+    private static final int GAME_IN_WAIT_TIMER_MAX = 5;
+    private static final int GAME_STATEMENT_INCREMENT = 5;
+
     private final Spleef spleef;
     private final List<SpleefPlayer> players;
 
@@ -59,12 +61,45 @@ public class SpleefGame {
 
                     return;
                 }
+
+                if (inWait) {
+                    waitingForGameSetup();
+
+                    return;
+                }
             }
         }.runTaskTimer(spleef, 0L, 20L);
     }
 
+    public void end(SpleefPlayer winner) {
+        String name = "Nobody";
+
+        if (winner != null) {
+            name = winner.getPlayer().getName();
+
+            winner.getPlayer().playSound(winner.getPlayer().getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 1.0f);
+            winner.getPlayer().sendTitle(ChatColor.GOLD + "You Won", "", 10, 60, 10);
+        }
+
+        FileManager config = spleef.getSpleefConfig().load();
+
+        for (SpleefPlayer player : getPlayingPlayers()) {
+            if (player != winner) {
+                player.sendMessage(ChatColor.GOLD + "The game is over! " + ChatColor.GREEN + name + ChatColor.GOLD + " won. Please wait " + ChatColor.WHITE + "30" + ChatColor.GOLD + " seconds for the next game.");
+                player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1.0f, 0.8f);
+            }
+
+            if (config.has("lobby"))
+                player.getPlayer().teleport(config.getLocation("lobby"));
+
+            player.setup();
+        }
+
+        start();
+    }
+
     private void notInGameSetup() {
-        if (gameTimer > 30) {
+        if (gameTimer >= GAME_SETUP_TIMER_MAX) {
             inGame = true;
             inWait = true;
             gameTimer = 0;
@@ -84,22 +119,49 @@ public class SpleefGame {
             for (SpleefPlayer p : players) {
                 p.setup();
 
-                p.getPlayer().sendMessage(ChatColor.GOLD + "The game has begun! You have 5 seconds before you can break blocks.");
+                p.sendMessage(ChatColor.GOLD + "Get ready! You have " + GAME_IN_WAIT_TIMER_MAX + " seconds before you can break blocks.");
                 p.getPlayer().getInventory().setItem(0, pickaxe);
                 p.getPlayer().teleport(arena.getLocation(name + ".spawn"));
                 p.getPlayer().playSound(p.getPlayer().getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, 1.0f, 1.0f);
             }
-        } else if (gameTimer % 5 == 0 && gameTimer < 26) {
+        } else if (gameTimer % GAME_STATEMENT_INCREMENT == 0) {
             for (SpleefPlayer p : getPlayingPlayers()) {
-                p.getPlayer().sendMessage(ChatColor.GREEN + "The game will begin in " + ChatColor.WHITE + (30 - gameTimer) + " seconds.");
+                p.sendMessage(ChatColor.GREEN + "The game will begin in " + ChatColor.WHITE + (GAME_SETUP_TIMER_MAX - gameTimer) + " seconds.");
                 p.getPlayer().playSound(p.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
             }
-        } else if (gameTimer > 26) {
+        } else if (gameTimer >= GAME_SETUP_TIMER_MAX - 3) {
             for (SpleefPlayer p : getPlayingPlayers()) {
-                float pitch = (30.0f - gameTimer) / 6.0f + 0.5f;
+                int second = GAME_SETUP_TIMER_MAX - gameTimer;
+                float pitch = second / 6.0f + 0.5f;
 
-                p.getPlayer().sendMessage(ChatColor.RED + "The game will begin in " + ChatColor.WHITE + (30 - gameTimer) + " seconds.");
+                p.sendMessage(ChatColor.RED + "The game will begin in " + ChatColor.WHITE + second + ChatColor.RED + " " + (second == 1 ? "second." : "seconds."));
                 p.getPlayer().playSound(p.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, pitch);
+            }
+        }
+    }
+
+    private void waitingForGameSetup() {
+        if (gameTimer >= GAME_IN_WAIT_TIMER_MAX) {
+            inGame = true;
+            inWait = false;
+            gameTimer = 0;
+            levelTimer = 0;
+
+            for (SpleefPlayer p : getPlayingPlayers()) {
+                p.sendMessage(ChatColor.GOLD + "The game has begun!");
+                p.getPlayer().playSound(p.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 0.8f);
+            }
+        } else if (gameTimer % GAME_STATEMENT_INCREMENT == 0) {
+            for (SpleefPlayer p : getPlayingPlayers()) {
+                p.sendMessage(ChatColor.GREEN + "Breaking blocks begins in " + ChatColor.WHITE + (GAME_IN_WAIT_TIMER_MAX - gameTimer) + " seconds.");
+                p.getPlayer().playSound(p.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+            }
+        } else if (gameTimer >= GAME_IN_WAIT_TIMER_MAX - 3) {
+            for (SpleefPlayer p : getPlayingPlayers()) {
+                int second = GAME_IN_WAIT_TIMER_MAX - gameTimer;
+
+                p.sendMessage(ChatColor.RED + "Breaking blocks begins in " + ChatColor.WHITE + second + ChatColor.RED + " " + (second == 1 ? "second." : "seconds."));
+                p.getPlayer().playSound(p.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
             }
         }
     }
@@ -164,6 +226,10 @@ public class SpleefGame {
         return players.stream().filter(SpleefPlayer::isDead).toList();
     }
 
+    public List<SpleefPlayer> getLivingPlayers() {
+        return players.stream().filter(x -> !x.isDead()).toList();
+    }
+
     public String getArena() {
         return arena;
     }
@@ -182,6 +248,10 @@ public class SpleefGame {
 
     public boolean isInGame() {
         return inGame;
+    }
+
+    public boolean isInWait() {
+        return inWait;
     }
 
     public boolean isRunning() {
