@@ -1,5 +1,6 @@
 package me.jdcomputers.spleef.timers;
 
+import me.jdcomputers.events.SpleefGameCancelledEvent;
 import me.jdcomputers.events.SpleefTeleportToArenaEvent;
 import me.jdcomputers.files.FileManager;
 import me.jdcomputers.spleef.SpleefGame;
@@ -21,7 +22,11 @@ public class WaitingGameTimer extends GameTimer {
 
     @Override
     protected void timerTick() {
+        if (game.getPlayingPlayers().isEmpty()) {
+            SpleefGameCancelledEvent event = new SpleefGameCancelledEvent(game);
 
+            Bukkit.getPluginManager().callEvent(event);
+        }
     }
 
     @Override
@@ -38,6 +43,8 @@ public class WaitingGameTimer extends GameTimer {
 
         String name = "arenas." + names.get(random.nextInt(names.size()));
 
+        game.setArena(name);
+
         Location from = arena.getLocation(name + ".from");
         Location to = arena.getLocation(name + ".to");
         Location spawnStored = arena.getLocation(name + ".spawn");
@@ -52,6 +59,9 @@ public class WaitingGameTimer extends GameTimer {
 
         Location spawn = arenaLoc.clone().add(xOffset, yOffset, zOffset);
 
+        spawn.setYaw(spawnStored.getYaw());
+        spawn.setPitch(spawnStored.getPitch());
+
         for (SpleefPlayer p : game.getPlayingPlayers()) {
             p.sendMessage(ChatColor.GOLD + "Get ready! You have " + getMaximum() + " seconds before you can break blocks.");
             p.getPlayer().teleport(spawn);
@@ -60,11 +70,13 @@ public class WaitingGameTimer extends GameTimer {
     }
 
     @Override
-    protected void timerPast() {
+    protected boolean timerPast() {
         for (SpleefPlayer p : game.getPlayingPlayers()) {
             p.sendMessage(ChatColor.GOLD + "The game has begun!");
             p.getPlayer().playSound(p.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 0.8f);
         }
+
+        return true;
     }
 
     @Override

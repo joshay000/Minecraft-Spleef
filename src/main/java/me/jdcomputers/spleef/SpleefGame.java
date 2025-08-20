@@ -13,11 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpleefGame {
-    private static final int GAME_SETUP_TIMER_MAX = 5;
-    private static final int GAME_IN_WAIT_TIMER_MAX = 5;
-    private static final int GAME_POST_TIMER_MAX = 5;
-    private static final int GAME_STATEMENT_INCREMENT = 5;
-
     private final Spleef spleef;
     private final List<SpleefPlayer> players;
 
@@ -43,26 +38,30 @@ public class SpleefGame {
     public void end(SpleefPlayer winner) {
         String name = "Nobody";
 
-        if (winner != null) {
-            name = winner.getPlayer().getName();
-
-            winner.getPlayer().playSound(winner.getPlayer().getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 1.0f);
-            winner.getPlayer().sendTitle(ChatColor.GOLD + "You Won", "", 10, 60, 10);
-            winner.sendMessage(ChatColor.GOLD + "You will be teleported to the lobby in " + ChatColor.WHITE + GAME_POST_TIMER_MAX + ChatColor.GOLD + " seconds.");
-        }
-
-        for (SpleefPlayer player : getPlayingPlayers()) {
-            if (player != winner) {
-                player.sendMessage(ChatColor.GOLD + "The game is over! " + ChatColor.GREEN + name + ChatColor.GOLD + " won. You will be teleported to the lobby in " + ChatColor.WHITE + GAME_POST_TIMER_MAX + ChatColor.GOLD + " seconds.");
-                player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1.0f, 0.8f);
-            }
-        }
-
         gameTimer = 0;
         levelTimer = 0;
 
         timer.end();
         timer = new GameOverTimer(this, 0L);
+
+        if (winner != null) {
+            name = winner.getPlayer().getName();
+
+            winner.getPlayer().playSound(winner.getPlayer().getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 1.0f);
+            winner.getPlayer().sendTitle(ChatColor.GOLD + "You Won", "", 10, 60, 10);
+            winner.sendMessage(ChatColor.GOLD + "You will be teleported to the lobby in " + ChatColor.WHITE + timer.getMaximum() + ChatColor.GOLD + " seconds.");
+        }
+
+        for (SpleefPlayer player : getPlayingPlayers()) {
+            if (player != winner) {
+                player.sendMessage(ChatColor.GOLD + "The game is over! " + ChatColor.GREEN + name + ChatColor.GOLD + " won. You will be teleported to the lobby in " + ChatColor.WHITE + timer.getMaximum() + ChatColor.GOLD + " seconds.");
+                player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1.0f, 0.8f);
+            }
+        }
+    }
+
+    public void setArena(String arena) {
+        this.arena = arena;
     }
 
     public SpleefPlayer addPlayer(Player player) {
@@ -141,5 +140,9 @@ public class SpleefGame {
 
     public boolean isInWait() {
         return timer instanceof WaitingGameTimer;
+    }
+
+    public GameTimer getTimer() {
+        return timer;
     }
 }

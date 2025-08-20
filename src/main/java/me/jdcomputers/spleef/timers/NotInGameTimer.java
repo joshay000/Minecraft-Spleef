@@ -47,7 +47,18 @@ public class NotInGameTimer extends GameTimer {
     }
 
     @Override
-    protected void timerPast() {
+    protected boolean timerPast() {
+        FileManager arena = game.getPlugin().getArenas().load();
+
+        if (arena.getSection("arenas").getKeys(false).isEmpty()) {
+            for (SpleefPlayer p : game.getPlayingPlayers())
+                p.sendMessage(ChatColor.RED + "The game failed to begin since there are no arenas created yet.");
+
+            current = 0;
+
+            return false;
+        }
+
         FileManager config = game.getPlugin().getSpleefConfig().load();
 
         ItemStack pickaxe = config.getItemStack("digger");
@@ -58,6 +69,8 @@ public class NotInGameTimer extends GameTimer {
 
             p.sendMessage(ChatColor.GOLD + "Creating arena; please be patient...");
         }
+
+        return true;
     }
 
     @Override

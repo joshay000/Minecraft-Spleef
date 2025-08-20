@@ -1,11 +1,13 @@
 package me.jdcomputers.src;
 
 import me.jdcomputers.events.CustomGameTimerFinishedEvent;
+import me.jdcomputers.events.SpleefGameCancelledEvent;
 import me.jdcomputers.events.SpleefTeleportToArenaEvent;
 import me.jdcomputers.files.FileManager;
 import me.jdcomputers.spleef.SpleefGame;
 import me.jdcomputers.spleef.SpleefPlayer;
 import me.jdcomputers.spleef.timers.*;
+import me.jdcomputers.worldedit.WorldEditCreations;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -66,7 +68,21 @@ public class MyListener implements Listener {
             return;
         }
 
-        player.teleport(arena.getLocation("arenas." + game.getArena() + ".spawn"));
+        Location from = arena.getLocation(game.getArena() + ".from");
+        Location to = arena.getLocation(game.getArena() + ".to");
+        Location spawnStored = arena.getLocation(game.getArena() + ".spawn");
+        Location arenaLoc = WorldEditCreations.ARENA_LOCATION;
+
+        int xOffset = spawnStored.getBlockX() - Math.min(from.getBlockX(), to.getBlockX());
+        int yOffset = spawnStored.getBlockY() - Math.min(from.getBlockY(), to.getBlockY());
+        int zOffset = spawnStored.getBlockZ() - Math.min(from.getBlockZ(), to.getBlockZ());
+
+        Location spawn = arenaLoc.clone().add(xOffset, yOffset, zOffset);
+
+        spawn.setYaw(spawnStored.getYaw());
+        spawn.setPitch(spawnStored.getPitch());
+
+        player.teleport(spawn);
         player.setGameMode(GameMode.SPECTATOR);
         player.sendMessage(ChatColor.RED + "A game is already in progress. Please spectate until the next game.");
     }
@@ -293,5 +309,13 @@ public class MyListener implements Listener {
             case GameOverTimer gameOverTimer -> game.setTimer(new NotInGameTimer(game, 40L));
             default -> {}
         }
+    }
+
+    @EventHandler
+    public void onGameCancelled(SpleefGameCancelledEvent event) {
+        SpleefGame game = event.getGame();
+
+        game.getTimer().end();
+        game.setTimer(new NotInGameTimer(game, 40L));
     }
 }

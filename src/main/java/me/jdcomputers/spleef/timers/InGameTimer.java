@@ -1,5 +1,6 @@
 package me.jdcomputers.spleef.timers;
 
+import me.jdcomputers.events.SpleefGameCancelledEvent;
 import me.jdcomputers.spleef.SpleefGame;
 import org.bukkit.Bukkit;
 
@@ -10,7 +11,11 @@ public class InGameTimer extends GameTimer {
 
     @Override
     protected void timerTick() {
+        if (game.getPlayingPlayers().isEmpty()) {
+            SpleefGameCancelledEvent event = new SpleefGameCancelledEvent(game);
 
+            Bukkit.getPluginManager().callEvent(event);
+        }
     }
 
     @Override
@@ -19,8 +24,8 @@ public class InGameTimer extends GameTimer {
     }
 
     @Override
-    protected void timerPast() {
-
+    protected boolean timerPast() {
+        return true;
     }
 
     @Override

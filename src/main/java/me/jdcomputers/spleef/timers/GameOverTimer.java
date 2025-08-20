@@ -20,8 +20,8 @@ public class GameOverTimer extends GameTimer {
     }
 
     @Override
-    protected void timerPast() {
-
+    protected boolean timerPast() {
+        return true;
     }
 
     @Override

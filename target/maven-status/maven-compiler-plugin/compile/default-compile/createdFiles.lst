@@ -7,6 +7,7 @@ me\jdcomputers\commands\Command.class
 me\jdcomputers\spleef\timers\WaitingGameTimer.class
 me\jdcomputers\spleef\SpleefPlayer.class
 me\jdcomputers\commands\spleef\lobby\LobbyTeleportCommand.class
+me\jdcomputers\events\SpleefGameCancelledEvent.class
 me\jdcomputers\events\SpleefTeleportToArenaEvent.class
 me\jdcomputers\commands\spleef\arena\ArenaCreateCommand.class
 me\jdcomputers\src\Spleef.class

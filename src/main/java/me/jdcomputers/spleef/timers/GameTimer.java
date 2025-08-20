@@ -55,11 +55,11 @@ public abstract class GameTimer {
         timerTick();
 
         if (current >= maximum) {
-            CustomGameTimerFinishedEvent event = new CustomGameTimerFinishedEvent(this);
+            if (timerPast()) {
+                CustomGameTimerFinishedEvent event = new CustomGameTimerFinishedEvent(this);
 
-            Bukkit.getPluginManager().callEvent(event);
-
-            timerPast();
+                Bukkit.getPluginManager().callEvent(event);
+            }
 
             return;
         }
@@ -78,7 +78,7 @@ public abstract class GameTimer {
 
     protected abstract void timerTick();
     protected abstract void timerInitialized();
-    protected abstract void timerPast();
+    protected abstract boolean timerPast();
     protected abstract void timerIncrement(int second);
     protected abstract void timerUpcoming(int second);
 
