@@ -53,8 +53,6 @@ public final class Spleef extends JavaPlugin {
 
         setDefaults();
 
-        game.reset();
-
         for (Player p : Bukkit.getOnlinePlayers()) {
             SpleefPlayer spleefPlayer = game.addPlayer(p);
 
@@ -72,7 +70,6 @@ public final class Spleef extends JavaPlugin {
         this.getLogger().info("Disabled");
 
         game.clearPlayers();
-        game.reset();
     }
 
     @Override

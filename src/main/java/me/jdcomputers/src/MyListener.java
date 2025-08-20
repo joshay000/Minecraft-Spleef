@@ -89,7 +89,7 @@ public class MyListener implements Listener {
 
         SpleefGame game = spleef.getGame();
 
-        if (game.isInGame() && game.isRunning() && !game.isInWait())
+        if (game.isInGame() && !game.isInWait())
             return;
 
         event.setCancelled(true);
@@ -104,7 +104,7 @@ public class MyListener implements Listener {
 
         SpleefGame game = spleef.getGame();
 
-        if (!game.isInGame() || !game.isRunning() || game.isInWait())
+        if (!game.isInGame() || game.isInWait())
             return;
 
         FileManager config = spleef.getSpleefConfig();
@@ -165,7 +165,7 @@ public class MyListener implements Listener {
 
         SpleefGame game = spleef.getGame();
 
-        if (game.isInGame() && game.isRunning() && !game.isInWait())
+        if (game.isInGame() && !game.isInWait())
             return;
 
         event.setCancelled(true);
@@ -218,8 +218,8 @@ public class MyListener implements Listener {
         Location loc = player.getLocation();
 
         Block in = loc.getBlock();
-        Block under = loc.subtract(0, 1, 0).getBlock();
-        Block above = loc.add(0, 1, 0).getBlock();
+        Block under = loc.clone().subtract(0, 0.5, 0).getBlock();
+        Block above = loc.clone().add(0, 1, 0).getBlock();
 
         if (in.getType() != Material.WATER &&
                 in.getType() != Material.LAVA &&
@@ -230,7 +230,7 @@ public class MyListener implements Listener {
 
         SpleefGame game = spleef.getGame();
 
-        if (!game.isInGame() || !game.isRunning() || game.isInWait())
+        if (!game.isInGame() || game.isInWait())
             return;
 
         SpleefPlayer sp = game.getPlayer(player);
