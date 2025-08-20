@@ -2,18 +2,16 @@ package me.jdcomputers.spleef.timers;
 
 import me.jdcomputers.spleef.SpleefGame;
 import me.jdcomputers.spleef.SpleefPlayer;
-import me.jdcomputers.src.Spleef;
 import org.bukkit.ChatColor;
 
 public class GameOverTimer extends GameTimer {
-    private final SpleefGame game;
+    public GameOverTimer(SpleefGame game, long delay) {
+        super(game, 5, 5, delay, 20L, true);
+    }
 
-    public GameOverTimer(SpleefGame game) {
-        super(game.getPlugin(), 5, 5, 20L, false);
+    @Override
+    protected void timerTick() {
 
-        this.game = game;
-
-        timerInitialized();
     }
 
     @Override

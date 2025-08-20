@@ -1,10 +1,11 @@
 package me.jdcomputers.spleef.timers;
 
+import me.jdcomputers.events.SpleefTeleportToArenaEvent;
 import me.jdcomputers.files.FileManager;
 import me.jdcomputers.spleef.SpleefGame;
 import me.jdcomputers.spleef.SpleefPlayer;
-import me.jdcomputers.src.Spleef;
 import me.jdcomputers.worldedit.WorldEditCreations;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -14,21 +15,24 @@ import java.util.List;
 import java.util.Random;
 
 public class WaitingGameTimer extends GameTimer {
-    private final SpleefGame game;
+    public WaitingGameTimer(SpleefGame game, long delay) {
+        super(game, 5, 5, delay, 20L, true);
+    }
 
-    public WaitingGameTimer(SpleefGame game) {
-        super(game.getPlugin(), 5, 5, 20L, true);
+    @Override
+    protected void timerTick() {
 
-        this.game = game;
-
-        timerInitialized();
     }
 
     @Override
     protected void timerInitialized() {
+        SpleefTeleportToArenaEvent event = new SpleefTeleportToArenaEvent(game);
+
+        Bukkit.getPluginManager().callEvent(event);
+
         Random random = new Random();
 
-        FileManager arena = spleef.getArenas().load();
+        FileManager arena = game.getPlugin().getArenas().load();
 
         List<String> names = new ArrayList<>(arena.getSection("arenas").getKeys(false));
 

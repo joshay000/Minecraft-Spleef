@@ -30,21 +30,14 @@ public class SpleefGame {
         this.spleef = spleef;
 
         players = new ArrayList<>();
-
-        start();
     }
 
     public void start() {
-        timer = new NotInGameTimer(this);
+        timer = new NotInGameTimer(this, 40L);
+    }
 
-        if (timer.isComplete()) {
-            if (timer instanceof NotInGameTimer)
-                timer = new WaitingGameTimer(this);
-            else if (timer instanceof WaitingGameTimer)
-                timer.end();
-            else if (timer instanceof GameOverTimer)
-                timer = new NotInGameTimer(this);
-        }
+    public void setTimer(GameTimer timer) {
+        this.timer = timer;
     }
 
     public void end(SpleefPlayer winner) {
@@ -67,6 +60,9 @@ public class SpleefGame {
 
         gameTimer = 0;
         levelTimer = 0;
+
+        timer.end();
+        timer = new GameOverTimer(this, 0L);
     }
 
     public SpleefPlayer addPlayer(Player player) {

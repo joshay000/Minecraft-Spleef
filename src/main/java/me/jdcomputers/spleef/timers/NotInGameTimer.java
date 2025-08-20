@@ -3,34 +3,29 @@ package me.jdcomputers.spleef.timers;
 import me.jdcomputers.files.FileManager;
 import me.jdcomputers.spleef.SpleefGame;
 import me.jdcomputers.spleef.SpleefPlayer;
-import me.jdcomputers.src.Spleef;
-import me.jdcomputers.worldedit.WorldEditCreations;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class NotInGameTimer extends GameTimer {
-    private final SpleefGame game;
+    public NotInGameTimer(SpleefGame game, long delay) {
+        super(game, 5, 5, delay, 20L, true);
+    }
 
-    public NotInGameTimer(SpleefGame game) {
-        super(game.getPlugin(), 5, 5, 20L, false);
-
-        this.game = game;
-
-        timerInitialized();
+    @Override
+    protected void timerTick() {
+        if (game.getPlayingPlayers().isEmpty())
+            current = 0;
     }
 
     @Override
     protected void timerInitialized() {
-        FileManager config = spleef.getSpleefConfig().load();
+        FileManager config = game.getPlugin().getSpleefConfig().load();
 
         for (SpleefPlayer p : game.getPlayingPlayers()) {
             if (config.has("lobby"))
@@ -39,7 +34,7 @@ public class NotInGameTimer extends GameTimer {
             p.setup();
         }
 
-        World world = spleef.getArenaWorld().getWorld();
+        World world = game.getPlugin().getArenaWorld().getWorld();
 
         if (world == null)
             return;
@@ -53,7 +48,7 @@ public class NotInGameTimer extends GameTimer {
 
     @Override
     protected void timerPast() {
-        FileManager config = spleef.getSpleefConfig().load();
+        FileManager config = game.getPlugin().getSpleefConfig().load();
 
         ItemStack pickaxe = config.getItemStack("digger");
 

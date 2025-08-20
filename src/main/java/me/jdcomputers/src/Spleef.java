@@ -52,17 +52,6 @@ public final class Spleef extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new MyListener(this), this);
 
         setDefaults();
-
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            SpleefPlayer spleefPlayer = game.addPlayer(p);
-
-            if (config.has("lobby"))
-                p.teleport(config.getLocation("lobby"));
-
-            spleefPlayer.setup();
-        }
-
-        game.start();
     }
 
     @Override

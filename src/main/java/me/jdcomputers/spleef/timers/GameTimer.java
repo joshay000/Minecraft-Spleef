@@ -1,22 +1,28 @@
 package me.jdcomputers.spleef.timers;
 
+import me.jdcomputers.events.CustomGameTimerFinishedEvent;
+import me.jdcomputers.spleef.SpleefGame;
 import me.jdcomputers.src.Spleef;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 public abstract class GameTimer {
-    protected final Spleef spleef;
+    protected final SpleefGame game;
     private final int maximum;
     private final int increment;
+    private final long delay;
     private final long tick;
 
-    private BukkitTask task;
-    private int current;
+    protected int current;
 
-    public GameTimer(Spleef spleef, int maximum, int increment, long tick, boolean defaultInitialized) {
-        this.spleef = spleef;
+    private BukkitTask task;
+
+    public GameTimer(SpleefGame game, int maximum, int increment, long delay, long tick, boolean defaultInitialized) {
+        this.game = game;
         this.maximum = maximum;
         this.increment = increment;
+        this.delay = delay;
         this.tick = tick;
 
         reset();
@@ -37,7 +43,7 @@ public abstract class GameTimer {
 
                 tick();
             }
-        }.runTaskTimer(spleef, 0L, tick);
+        }.runTaskTimer(game.getPlugin(), delay, tick);
     }
 
     public void end() {
@@ -46,7 +52,13 @@ public abstract class GameTimer {
     }
 
     protected void tick() {
+        timerTick();
+
         if (current >= maximum) {
+            CustomGameTimerFinishedEvent event = new CustomGameTimerFinishedEvent(this);
+
+            Bukkit.getPluginManager().callEvent(event);
+
             timerPast();
 
             return;
@@ -64,13 +76,18 @@ public abstract class GameTimer {
         timerUpcoming(maximum - current);
     }
 
+    protected abstract void timerTick();
     protected abstract void timerInitialized();
     protected abstract void timerPast();
     protected abstract void timerIncrement(int second);
     protected abstract void timerUpcoming(int second);
 
+    public SpleefGame getGame() {
+        return game;
+    }
+
     public Spleef getSpleef() {
-        return spleef;
+        return game.getPlugin();
     }
 
     public int getCurrent() {

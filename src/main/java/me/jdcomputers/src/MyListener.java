@@ -1,8 +1,11 @@
 package me.jdcomputers.src;
 
+import me.jdcomputers.events.CustomGameTimerFinishedEvent;
+import me.jdcomputers.events.SpleefTeleportToArenaEvent;
 import me.jdcomputers.files.FileManager;
 import me.jdcomputers.spleef.SpleefGame;
 import me.jdcomputers.spleef.SpleefPlayer;
+import me.jdcomputers.spleef.timers.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -14,6 +17,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.server.ServerLoadEvent;
 
 import java.util.List;
 import java.util.Random;
@@ -24,6 +28,22 @@ public class MyListener implements Listener {
 
     public MyListener(Spleef spleef) {
         this.spleef = spleef;
+    }
+
+    @EventHandler
+    public void onBukkitLoad(ServerLoadEvent event) {
+        FileManager config = spleef.getSpleefConfig().load();
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            SpleefPlayer spleefPlayer = spleef.getGame().addPlayer(p);
+
+            if (config.has("lobby"))
+                p.teleport(config.getLocation("lobby"));
+
+            spleefPlayer.setup();
+        }
+
+        spleef.getGame().start();
     }
 
     @EventHandler
@@ -251,5 +271,27 @@ public class MyListener implements Listener {
         }
 
         game.end(null);
+    }
+
+    @EventHandler
+    public void onCustomGameTimerCompleted(CustomGameTimerFinishedEvent event) {
+        GameTimer timer = event.getTimer();
+        SpleefGame game = event.getGame();
+
+        timer.end();
+
+        if (game.getPlayingPlayers().isEmpty()) {
+            game.setTimer(new NotInGameTimer(game, 40L));
+
+            return;
+        }
+
+        switch (timer) {
+            case NotInGameTimer notInGameTimer -> game.setTimer(new WaitingGameTimer(game, 40L));
+            case WaitingGameTimer waitingGameTimer -> game.setTimer(new InGameTimer(game, 0L));
+            case InGameTimer inGameTimer -> timer.reset();
+            case GameOverTimer gameOverTimer -> game.setTimer(new NotInGameTimer(game, 40L));
+            default -> {}
+        }
     }
 }
