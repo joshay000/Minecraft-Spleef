@@ -17,7 +17,7 @@ import java.util.Random;
 
 public class WaitingGameTimer extends GameTimer {
     public WaitingGameTimer(SpleefGame game, long delay) {
-        super(game, 5, 5, delay, 20L, true);
+        super(game, 5, 5, delay, 20L);
     }
 
     @Override

@@ -1,10 +1,9 @@
 package me.jdcomputers.spleef;
 
-import me.jdcomputers.files.FileManager;
-import me.jdcomputers.spleef.timers.GameOverTimer;
 import me.jdcomputers.spleef.timers.GameTimer;
 import me.jdcomputers.spleef.timers.NotInGameTimer;
 import me.jdcomputers.spleef.timers.WaitingGameTimer;
+import me.jdcomputers.src.MyListener;
 import me.jdcomputers.src.Spleef;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -27,12 +26,11 @@ public class SpleefGame {
         players = new ArrayList<>();
     }
 
-    public void start() {
-        timer = new NotInGameTimer(this, 40L);
-    }
-
     public void setTimer(GameTimer timer) {
-        this.timer = timer;
+        if (this.timer != null)
+            this.timer.end();
+
+        this.timer = timer.reset();
     }
 
     public void end(SpleefPlayer winner) {
@@ -41,8 +39,7 @@ public class SpleefGame {
         gameTimer = 0;
         levelTimer = 0;
 
-        timer.end();
-        timer = new GameOverTimer(this, 0L);
+        setTimer(MyListener.getGameOverTimer());
 
         if (winner != null) {
             name = winner.getPlayer().getName();

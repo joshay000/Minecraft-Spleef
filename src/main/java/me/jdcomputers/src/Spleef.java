@@ -24,9 +24,7 @@ import java.util.List;
 
 public final class Spleef extends JavaPlugin {
     // TODO:
-    // 1) Add permissions for /spleef arena (op only OR require detailed permissions [LOW PRIORITY]
-    // 2) Battle royale aspect: Rising water/lava levels
-    // 3) Fix the game starting even when there is no arena
+    // 1) Add permissions for /spleef arena (op only OR require detailed permissions
 
     private static Spleef SINGLETON;
 

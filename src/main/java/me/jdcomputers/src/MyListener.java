@@ -28,8 +28,18 @@ import java.util.Set;
 public class MyListener implements Listener {
     private final Spleef spleef;
 
+    private static NotInGameTimer notInGameTimer;
+    private static WaitingGameTimer waitingGameTimer;
+    private static InGameTimer inGameTimer;
+    private static GameOverTimer gameOverTimer;
+
     public MyListener(Spleef spleef) {
         this.spleef = spleef;
+
+        notInGameTimer = new NotInGameTimer(spleef.getGame(), 40L);
+        waitingGameTimer = new WaitingGameTimer(spleef.getGame(), 40L);
+        inGameTimer = new InGameTimer(spleef.getGame(), 0L);
+        gameOverTimer = new GameOverTimer(spleef.getGame(), 0L);
     }
 
     @EventHandler
@@ -45,7 +55,7 @@ public class MyListener implements Listener {
             spleefPlayer.setup();
         }
 
-        spleef.getGame().start();
+        spleef.getGame().setTimer(notInGameTimer);
     }
 
     @EventHandler
@@ -101,19 +111,13 @@ public class MyListener implements Listener {
     }
 
     @EventHandler
-    public void onHitPlayer(EntityDamageByEntityEvent event) {
+    public void onPlayerTakeDamage(EntityDamageByEntityEvent event) {
         Entity start = event.getEntity();
-        Entity end = event.getDamager();
 
-        if (!(start instanceof Player target))
-            return;
-
-        if (!(end instanceof Player damager))
+        if (!(start instanceof Player))
             return;
 
         event.setCancelled(true);
-
-        damager.sendMessage(ChatColor.RED + "You cannot PVP on the spleef server.");
     }
 
     @EventHandler
@@ -294,21 +298,18 @@ public class MyListener implements Listener {
         GameTimer timer = event.getTimer();
         SpleefGame game = event.getGame();
 
-        timer.end();
-
         if (game.getPlayingPlayers().isEmpty()) {
-            game.setTimer(new NotInGameTimer(game, 40L));
+            game.setTimer(notInGameTimer);
 
             return;
         }
 
-        switch (timer) {
-            case NotInGameTimer notInGameTimer -> game.setTimer(new WaitingGameTimer(game, 40L));
-            case WaitingGameTimer waitingGameTimer -> game.setTimer(new InGameTimer(game, 0L));
-            case InGameTimer inGameTimer -> timer.reset();
-            case GameOverTimer gameOverTimer -> game.setTimer(new NotInGameTimer(game, 40L));
-            default -> {}
-        }
+        if (timer instanceof NotInGameTimer)
+            game.setTimer(waitingGameTimer);
+        else if (timer instanceof WaitingGameTimer || timer instanceof InGameTimer)
+            game.setTimer(inGameTimer);
+        else if (timer instanceof GameOverTimer)
+            game.setTimer(notInGameTimer);
     }
 
     @EventHandler
@@ -316,6 +317,22 @@ public class MyListener implements Listener {
         SpleefGame game = event.getGame();
 
         game.getTimer().end();
-        game.setTimer(new NotInGameTimer(game, 40L));
+        game.setTimer(notInGameTimer);
+    }
+
+    public static NotInGameTimer getNotInGameTimer() {
+        return notInGameTimer;
+    }
+
+    public static WaitingGameTimer getWaitingGameTimer() {
+        return waitingGameTimer;
+    }
+
+    public static InGameTimer getInGameTimer() {
+        return inGameTimer;
+    }
+
+    public static GameOverTimer getGameOverTimer() {
+        return gameOverTimer;
     }
 }

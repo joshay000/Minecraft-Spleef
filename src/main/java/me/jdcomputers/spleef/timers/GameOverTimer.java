@@ -6,7 +6,7 @@ import org.bukkit.ChatColor;
 
 public class GameOverTimer extends GameTimer {
     public GameOverTimer(SpleefGame game, long delay) {
-        super(game, 5, 5, delay, 20L, true);
+        super(game, 5, 5, delay, 20L);
     }
 
     @Override

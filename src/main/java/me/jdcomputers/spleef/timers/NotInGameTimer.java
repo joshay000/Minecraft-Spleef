@@ -14,7 +14,7 @@ import java.util.List;
 
 public class NotInGameTimer extends GameTimer {
     public NotInGameTimer(SpleefGame game, long delay) {
-        super(game, 5, 5, delay, 20L, true);
+        super(game, 5, 5, delay, 20L);
     }
 
     @Override

@@ -18,23 +18,20 @@ public abstract class GameTimer {
 
     private BukkitTask task;
 
-    public GameTimer(SpleefGame game, int maximum, int increment, long delay, long tick, boolean defaultInitialized) {
+    public GameTimer(SpleefGame game, int maximum, int increment, long delay, long tick) {
         this.game = game;
         this.maximum = maximum;
         this.increment = increment;
         this.delay = delay;
         this.tick = tick;
-
-        reset();
-
-        if (defaultInitialized)
-            timerInitialized();
     }
 
-    public void reset() {
+    public GameTimer reset() {
+        end();
+
         current = 0;
 
-        end();
+        timerInitialized();
 
         task = new BukkitRunnable() {
             @Override
@@ -44,6 +41,8 @@ public abstract class GameTimer {
                 tick();
             }
         }.runTaskTimer(game.getPlugin(), delay, tick);
+
+        return this;
     }
 
     public void end() {
