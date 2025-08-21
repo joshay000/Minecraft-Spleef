@@ -2,6 +2,7 @@ package me.jdcomputers.commands.spleef.lobby;
 
 import me.jdcomputers.commands.Command;
 import me.jdcomputers.files.FileManager;
+import me.jdcomputers.permissions.Permissions;
 import me.jdcomputers.src.Spleef;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -16,6 +17,12 @@ public class LobbyTeleportCommand extends Command {
 
     @Override
     public void run(Player player, String[] args) {
+        if (!Permissions.hasPermission(player, Permissions.SPLEEF_ALL, Permissions.LOBBY_TELEPORT, Permissions.LOBBY_ALL)) {
+            player.sendMessage(ChatColor.RED + "Insufficient permissions.");
+
+            return;
+        }
+
         FileManager config = Spleef.getInstance().getSpleefConfig().load();
 
         if (!config.has("lobby")) {

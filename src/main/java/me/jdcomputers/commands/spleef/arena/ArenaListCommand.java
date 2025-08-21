@@ -2,6 +2,7 @@ package me.jdcomputers.commands.spleef.arena;
 
 import me.jdcomputers.commands.Command;
 import me.jdcomputers.files.FileManager;
+import me.jdcomputers.permissions.Permissions;
 import me.jdcomputers.src.Spleef;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -16,6 +17,12 @@ public class ArenaListCommand extends Command {
 
     @Override
     public void run(Player player, String[] args) {
+        if (!Permissions.hasPermission(player, Permissions.SPLEEF_ALL, Permissions.ARENA_LIST, Permissions.ARENA_ALL)) {
+            player.sendMessage(ChatColor.RED + "Insufficient permissions.");
+
+            return;
+        }
+
         final int ITEMS_PER_PAGE = 10;
 
         int page = 1;

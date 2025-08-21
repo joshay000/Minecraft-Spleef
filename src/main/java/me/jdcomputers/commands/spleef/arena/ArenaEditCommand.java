@@ -2,6 +2,7 @@ package me.jdcomputers.commands.spleef.arena;
 
 import me.jdcomputers.commands.Command;
 import me.jdcomputers.files.FileManager;
+import me.jdcomputers.permissions.Permissions;
 import me.jdcomputers.src.Spleef;
 import me.jdcomputers.worlds.ArenaWorld;
 import org.bukkit.Bukkit;
@@ -21,6 +22,12 @@ public class ArenaEditCommand extends Command {
 
     @Override
     public void run(Player player, String[] args) {
+        if (!Permissions.hasPermission(player, Permissions.SPLEEF_ALL, Permissions.ARENA_EDIT, Permissions.ARENA_ALL)) {
+            player.sendMessage(ChatColor.RED + "Insufficient permissions.");
+
+            return;
+        }
+
         if (args.length < 3) {
             player.sendMessage(ChatColor.RED + "Correct usage: /spleef arena edit <name>");
 
@@ -58,6 +65,9 @@ public class ArenaEditCommand extends Command {
 
     @Override
     public List<String> tabComplete(Player player, String[] args) {
+        if (!Permissions.hasPermission(player, Permissions.SPLEEF_ALL, Permissions.ARENA_EDIT, Permissions.ARENA_ALL))
+            return null;
+
         FileManager arena = Spleef.getInstance().getArenas().load();
 
         Set<String> keys = arena.getSection("arenas").getKeys(false);

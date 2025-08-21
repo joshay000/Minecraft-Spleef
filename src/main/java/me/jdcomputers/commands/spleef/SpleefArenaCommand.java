@@ -2,6 +2,7 @@ package me.jdcomputers.commands.spleef;
 
 import me.jdcomputers.commands.Command;
 import me.jdcomputers.commands.spleef.arena.*;
+import me.jdcomputers.permissions.Permissions;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -21,11 +22,20 @@ public class SpleefArenaCommand extends Command {
 
     @Override
     public void run(Player player, String[] args) {
+        if (!Permissions.hasPermission(player, Permissions.SPLEEF_ALL, Permissions.ARENA, Permissions.ARENA_ALL)) {
+            player.sendMessage(ChatColor.RED + "Insufficient permissions.");
+
+            return;
+        }
+
         player.sendMessage(ChatColor.RED + "Correct usage: /spleef arena <list|create|edit|delete|spawn>");
     }
 
     @Override
     public List<String> tabComplete(Player player, String[] args) {
+        if (!Permissions.hasPermission(player, Permissions.SPLEEF_ALL, Permissions.ARENA, Permissions.ARENA_ALL))
+            return null;
+
         List<String> output = new ArrayList<>();
 
         output.add("list");

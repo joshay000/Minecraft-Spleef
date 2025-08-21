@@ -4,7 +4,7 @@
   <groupId>me.jdcomputers</groupId>
   <artifactId>Spleef</artifactId>
   <name>Spleef</name>
-  <version>0.0.9</version>
+  <version>0.1.0</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>

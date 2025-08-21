@@ -2,6 +2,7 @@ package me.jdcomputers.commands.spleef.arena;
 
 import me.jdcomputers.commands.Command;
 import me.jdcomputers.files.FileManager;
+import me.jdcomputers.permissions.Permissions;
 import me.jdcomputers.src.Spleef;
 import me.jdcomputers.worldedit.WorldEditCreations;
 import me.jdcomputers.worlds.ArenaWorld;
@@ -21,6 +22,12 @@ public class ArenaCreateCommand extends Command {
 
     @Override
     public void run(Player player, String[] args) {
+        if (!Permissions.hasPermission(player, Permissions.SPLEEF_ALL, Permissions.ARENA_CREATE, Permissions.ARENA_ALL)) {
+            player.sendMessage(ChatColor.RED + "Insufficient permissions.");
+
+            return;
+        }
+
         if (args.length < 5) {
             player.sendMessage(ChatColor.RED + "Correct usage: /spleef arena create <water|lava> <diameter> <name>");
 
@@ -99,6 +106,9 @@ public class ArenaCreateCommand extends Command {
 
     @Override
     public List<String> tabComplete(Player player, String[] args) {
+        if (!Permissions.hasPermission(player, Permissions.SPLEEF_ALL, Permissions.ARENA_CREATE, Permissions.ARENA_ALL))
+            return null;
+
         List<String> output = new ArrayList<>();
 
         if (args.length < 3) {

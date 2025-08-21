@@ -2,6 +2,7 @@ package me.jdcomputers.commands.spleef;
 
 import me.jdcomputers.commands.Command;
 import me.jdcomputers.files.FileManager;
+import me.jdcomputers.permissions.Permissions;
 import me.jdcomputers.src.Spleef;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -17,6 +18,12 @@ public class SpleefConfigCommand extends Command {
 
     @Override
     public void run(Player player, String[] args) {
+        if (!Permissions.hasPermission(player, Permissions.SPLEEF_ALL, Permissions.CONFIG)) {
+            player.sendMessage(ChatColor.RED + "Insufficient permissions.");
+
+            return;
+        }
+
         if (args.length < 2) {
             player.sendMessage(ChatColor.RED + "Correct usage: /spleef config <key>");
 
@@ -75,6 +82,9 @@ public class SpleefConfigCommand extends Command {
 
     @Override
     public List<String> tabComplete(Player player, String[] args) {
+        if (!Permissions.hasPermission(player, Permissions.SPLEEF_ALL, Permissions.CONFIG))
+            return null;
+
         List<String> output = new ArrayList<>();
 
         output.add("digger");
