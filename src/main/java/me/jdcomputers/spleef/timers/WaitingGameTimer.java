@@ -17,12 +17,12 @@ import java.util.Random;
 
 public class WaitingGameTimer extends GameTimer {
     public WaitingGameTimer(SpleefGame game, long delay) {
-        super(game, 5, 5, delay, 20L);
+        super(game, 10, 5, delay, 20L);
     }
 
     @Override
     protected void timerTick() {
-        if (game.getPlayingPlayers().isEmpty()) {
+        if (game.getPlayingPlayers().size() < 2) {
             SpleefGameCancelledEvent event = new SpleefGameCancelledEvent(game);
 
             Bukkit.getPluginManager().callEvent(event);
@@ -41,7 +41,9 @@ public class WaitingGameTimer extends GameTimer {
 
         List<String> names = new ArrayList<>(arena.getSection("arenas").getKeys(false));
 
-        String name = "arenas." + names.get(random.nextInt(names.size()));
+        int index = random.nextInt(names.size());
+
+        String name = "arenas." + names.get(index);
 
         game.setArena(name);
 

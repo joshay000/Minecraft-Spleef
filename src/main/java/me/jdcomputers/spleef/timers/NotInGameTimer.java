@@ -14,12 +14,12 @@ import java.util.List;
 
 public class NotInGameTimer extends GameTimer {
     public NotInGameTimer(SpleefGame game, long delay) {
-        super(game, 5, 5, delay, 20L);
+        super(game, 20, 5, delay, 20L);
     }
 
     @Override
     protected void timerTick() {
-        if (game.getPlayingPlayers().isEmpty())
+        if (game.getPlayingPlayers().size() < 2)
             current = 0;
     }
 
@@ -75,6 +75,9 @@ public class NotInGameTimer extends GameTimer {
 
     @Override
     protected void timerIncrement(int second) {
+        if (current == 0)
+            return;
+
         for (SpleefPlayer p : game.getPlayingPlayers()) {
             p.sendMessage(ChatColor.GREEN + "The game will begin in " + ChatColor.WHITE + second + " seconds.");
             p.getPlayer().playSound(p.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);

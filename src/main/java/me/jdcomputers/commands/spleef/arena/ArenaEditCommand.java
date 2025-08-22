@@ -2,6 +2,7 @@ package me.jdcomputers.commands.spleef.arena;
 
 import me.jdcomputers.commands.Command;
 import me.jdcomputers.files.FileManager;
+import me.jdcomputers.inventory.InventoryDefaults;
 import me.jdcomputers.permissions.Permissions;
 import me.jdcomputers.src.Spleef;
 import me.jdcomputers.worlds.ArenaWorld;
@@ -61,6 +62,8 @@ public class ArenaEditCommand extends Command {
         player.teleport(spawn);
         player.setGameMode(GameMode.CREATIVE);
         player.getInventory().clear();
+
+        InventoryDefaults.setupCreation(player);
     }
 
     @Override

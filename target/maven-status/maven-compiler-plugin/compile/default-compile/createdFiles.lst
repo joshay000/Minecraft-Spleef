@@ -10,6 +10,7 @@ me\jdcomputers\commands\spleef\lobby\LobbyTeleportCommand.class
 me\jdcomputers\events\SpleefGameCancelledEvent.class
 me\jdcomputers\events\SpleefTeleportToArenaEvent.class
 me\jdcomputers\commands\spleef\arena\ArenaCreateCommand.class
+me\jdcomputers\inventory\InventoryDefaults.class
 me\jdcomputers\src\Spleef.class
 me\jdcomputers\commands\spleef\arena\ArenaSpawnCommand.class
 me\jdcomputers\files\FileManager.class
@@ -29,3 +30,4 @@ me\jdcomputers\commands\spleef\arena\ArenaListCommand.class
 me\jdcomputers\worlds\CustomWorld.class
 me\jdcomputers\commands\spleef\arena\ArenaDeleteCommand.class
 me\jdcomputers\commands\spleef\arena\ArenaEditCommand.class
+me\jdcomputers\permissions\Permissions.class

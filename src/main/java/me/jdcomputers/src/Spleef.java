@@ -23,9 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Spleef extends JavaPlugin {
-    // TODO:
-    // 1) Add permissions for /spleef arena (op only OR require detailed permissions)
-
     private static Spleef SINGLETON;
 
     private final ArenaWorld arenaWorld = new ArenaWorld();

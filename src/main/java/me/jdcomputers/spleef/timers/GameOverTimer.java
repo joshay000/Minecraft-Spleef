@@ -3,10 +3,11 @@ package me.jdcomputers.spleef.timers;
 import me.jdcomputers.spleef.SpleefGame;
 import me.jdcomputers.spleef.SpleefPlayer;
 import org.bukkit.ChatColor;
+import org.bukkit.potion.PotionEffect;
 
 public class GameOverTimer extends GameTimer {
     public GameOverTimer(SpleefGame game, long delay) {
-        super(game, 5, 5, delay, 20L);
+        super(game, 10, 5, delay, 20L);
     }
 
     @Override
@@ -16,7 +17,9 @@ public class GameOverTimer extends GameTimer {
 
     @Override
     protected void timerInitialized() {
-
+        for (SpleefPlayer p : game.getPlayingPlayers())
+            for (PotionEffect effect : p.getPlayer().getActivePotionEffects())
+                p.getPlayer().removePotionEffect(effect.getType());
     }
 
     @Override

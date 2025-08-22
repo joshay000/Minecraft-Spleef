@@ -78,6 +78,14 @@ public class MyListener implements Listener {
             return;
         }
 
+        if (game.getPlayingPlayers().isEmpty()) {
+            SpleefGameCancelledEvent newEvent = new SpleefGameCancelledEvent(game);
+
+            Bukkit.getPluginManager().callEvent(newEvent);
+
+            return;
+        }
+
         Location from = arena.getLocation(game.getArena() + ".from");
         Location to = arena.getLocation(game.getArena() + ".to");
         Location spawnStored = arena.getLocation(game.getArena() + ".spawn");
@@ -106,8 +114,27 @@ public class MyListener implements Listener {
 
         List<SpleefPlayer> players = game.getPlayingPlayers();
 
+        if (game.isInGame() && players.size() == 1) {
+            game.end(players.getFirst());
+
+            return;
+        }
+
         for (SpleefPlayer p : players)
             p.getPlayer().playSound(p.getPlayer().getLocation().add(0, 50, 0), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1.0f, 1.0f);
+
+        if (players.size() > 1)
+            return;
+
+        if (!game.isInGame() || game.isInWait()) {
+            SpleefGameCancelledEvent newEvent = new SpleefGameCancelledEvent(game);
+
+            Bukkit.getPluginManager().callEvent(newEvent);
+
+            return;
+        }
+
+        game.end(players.isEmpty() ? null : players.getFirst());
     }
 
     @EventHandler
@@ -281,7 +308,7 @@ public class MyListener implements Listener {
 
         int remaining = remainingPlayers.size();
 
-        if (remaining > 0) {
+        if (remaining > 1) {
             for (SpleefPlayer p : game.getPlayingPlayers()) {
                 p.sendMessage(ChatColor.GREEN + sp.getPlayer().getName() + ChatColor.GOLD + " has died. There are now " + ChatColor.WHITE + remaining + ChatColor.GOLD + " " + (remaining == 1 ? "player" : "players") + " remaining...");
                 p.getPlayer().playSound(p.getPlayer().getLocation().add(0, 50, 0), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1.0f, 1.0f);
@@ -290,7 +317,7 @@ public class MyListener implements Listener {
             return;
         }
 
-        game.end(null);
+        game.end(remainingPlayers.getFirst());
     }
 
     @EventHandler
@@ -298,7 +325,7 @@ public class MyListener implements Listener {
         GameTimer timer = event.getTimer();
         SpleefGame game = event.getGame();
 
-        if (game.getPlayingPlayers().isEmpty()) {
+        if (game.getPlayingPlayers().size() < 2) {
             game.setTimer(notInGameTimer);
 
             return;

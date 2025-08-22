@@ -44,6 +44,7 @@ public class SpleefGame {
         if (winner != null) {
             name = winner.getPlayer().getName();
 
+            winner.getPlayer().setGameMode(GameMode.SPECTATOR);
             winner.getPlayer().playSound(winner.getPlayer().getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 1.0f);
             winner.getPlayer().sendTitle(ChatColor.GOLD + "You Won", "", 10, 60, 10);
             winner.sendMessage(ChatColor.GOLD + "You will be teleported to the lobby in " + ChatColor.WHITE + timer.getMaximum() + ChatColor.GOLD + " seconds.");

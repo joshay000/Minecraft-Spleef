@@ -9,12 +9,12 @@ import org.bukkit.scheduler.BukkitTask;
 
 public abstract class GameTimer {
     protected final SpleefGame game;
-    private final int maximum;
     private final int increment;
     private final long delay;
     private final long tick;
 
     protected int current;
+    protected int maximum;
 
     private BukkitTask task;
 

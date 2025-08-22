@@ -10,19 +10,22 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class InGameTimer extends GameTimer {
     private FileManager arena;
+    private int times;
 
     public InGameTimer(SpleefGame game, long delay) {
-        super(game, 10, 5, delay, 20L);
+        super(game, 30, 5, delay, 20L);
 
         arena = game.getPlugin().getArenas().load();
     }
 
     @Override
     protected void timerTick() {
-        if (game.getPlayingPlayers().isEmpty()) {
+        if (game.getPlayingPlayers().size() < 2) {
             SpleefGameCancelledEvent event = new SpleefGameCancelledEvent(game);
 
             Bukkit.getPluginManager().callEvent(event);
@@ -31,7 +34,17 @@ public class InGameTimer extends GameTimer {
 
     @Override
     protected void timerInitialized() {
+        maximum = Math.min(game.getLivingPlayers().size() * 5, 30);
+
+        times++;
+
+        if (times > 10 && game.getLivingPlayers().size() == 2)
+            maximum /= 2;
+
         arena = game.getPlugin().getArenas().load();
+
+        for (SpleefPlayer player : game.getPlayingPlayers())
+            player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 600, 1, true, false, false));
     }
 
     @Override
